@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UI;
 
 public class SimpleInfiniteScroll : AbstractInfiniteScroll
@@ -19,7 +20,11 @@ public class SimpleInfiniteScroll : AbstractInfiniteScroll
   {
     if ( WithinRangeBottom )
     {
+      Profiler.BeginSample( "generate new element" );
+
       GenerateNewElement();
+
+      Profiler.EndSample();
     }
   }
 }

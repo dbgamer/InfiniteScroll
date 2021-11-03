@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class PooledInfiniteScroll : AbstractInfiniteScroll
 {
@@ -47,11 +48,19 @@ public class PooledInfiniteScroll : AbstractInfiniteScroll
 
     if ( WithinRangeTop )
     {
+      Profiler.BeginSample( "activate top element" );
+
       AddElementToTop();
+      
+      Profiler.EndSample();
     }
     if ( WithinRangeBottom )
     {
+      Profiler.BeginSample( "activate bottom element" );
+
       AddElementToBottom();
+
+      Profiler.EndSample();
     }
   }
 
@@ -61,10 +70,15 @@ public class PooledInfiniteScroll : AbstractInfiniteScroll
   /// <returns></returns>
   protected override (InfiniteScrollElement, ElementData) GenerateNewElement()
   {
+    Profiler.BeginSample( "generate new element" );
+
     var el = base.GenerateNewElement();
     elementList.Add( el.Item1 );
     dataList.Add( el.Item2 );
     heightList.Add( 0 );
+
+    Profiler.EndSample();
+
     return el;
   }
 
@@ -127,6 +141,8 @@ public class PooledInfiniteScroll : AbstractInfiniteScroll
   /// </summary>
   private void MoveElement( int from, int to )
   {
+    Profiler.BeginSample( "moving element" );
+
     if ( to > from )
     {
       to--;
@@ -136,5 +152,7 @@ public class PooledInfiniteScroll : AbstractInfiniteScroll
     elementList.RemoveAt( from );
     elementList.Insert( to, element );
     element.transform.SetSiblingIndex( to );
+
+    Profiler.EndSample();
   }
 }

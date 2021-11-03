@@ -58,6 +58,8 @@ public class HiddenInfiniteScroll : AbstractInfiniteScroll
   /// </summary>
   protected override (InfiniteScrollElement, ElementData) GenerateNewElement()
   {
+    Profiler.BeginSample( "generate new element" );
+
     var tuple = base.GenerateNewElement();
     var gameObj = tuple.Item1.gameObject;
     if ( !gameObj.TryGetComponent( out CanvasGroup canvasGroup ) )
@@ -65,6 +67,9 @@ public class HiddenInfiniteScroll : AbstractInfiniteScroll
       canvasGroup = gameObj.AddComponent<CanvasGroup>();
     }
     canvasGroups.Add( canvasGroup );
+
+    Profiler.EndSample();
+
     return tuple;
   }
 
